@@ -16,9 +16,9 @@
 
 ![Dashboard — bankroll over time, 7-day P&L, and per-sport performance](screenshots/dashboard.png)
 
-| Stats & edge analytics | Daily report | Line shopping |
+| Edge analytics by sport | Daily report | CLV — beat the close |
 |:---:|:---:|:---:|
-| ![Stats and edge analytics](screenshots/stats.png) | ![WagerTalk-style daily report](screenshots/daily-report.png) | ![Line shopping across 30+ books](screenshots/line-shop.png) |
+| ![Per-sport edge, ROI, and units](screenshots/stats.png) | ![WagerTalk-style daily report](screenshots/daily-report.png) | ![Closing-line value vs the sharp price, per pick](screenshots/clv.png) |
 
 ---
 
