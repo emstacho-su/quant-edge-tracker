@@ -1,0 +1,229 @@
+@import "tailwindcss";
+@import "shadcn/tailwind.css";
+@import "@fontsource-variable/geist";
+
+@custom-variant dark (&:is(.dark *));
+
+/* ===========================================================
+   Replaces the existing @theme { ... } block in src/index.css
+   (lines 7–34). Tailwind v4 — tokens live here, not in a
+   tailwind.config.ts. Warm-neutral palette, zero blue cast.
+   =========================================================== */
+@theme {
+  /* ---- Neutral surface scale (warm charcoal → off-white) ---- */
+  --color-background:           #0c0b0a;  /* base — warm charcoal, NOT pure black */
+  --color-foreground:           #fafaf9;  /* off-white, NOT pure white */
+
+  --color-card:                 #141312;  /* solid card fallback (glass cards use .glass-card) */
+  --color-card-foreground:      #fafaf9;
+
+  --color-popover:              #1c1a17;  /* slightly elevated popovers/menus */
+  --color-popover-foreground:   #fafaf9;
+
+  --color-primary:              #fafaf9;  /* primary action surface — off-white on dark */
+  --color-primary-foreground:   #0c0b0a;
+
+  --color-secondary:            #27241f;  /* secondary surface — warm graphite */
+  --color-secondary-foreground: #fafaf9;
+
+  --color-muted:                #27241f;  /* muted surface — same as secondary */
+  --color-muted-foreground:     #a8a29e;  /* muted copy — neutral-400, no blue */
+
+  --color-accent:               #27241f;  /* hover/accent surface */
+  --color-accent-foreground:    #fafaf9;
+
+  --color-border:               #2a2723;  /* hairline border — warm, low-contrast */
+  --color-input:                #2a2723;
+  --color-ring:                 #57534e;  /* focus ring — neutral-600, no purple/blue */
+
+  /* ---- Semantic tokens (preserve meaning across the app) ---- */
+  --color-destructive:            #f87171;  /* loss-red, desaturated from #dc2626 */
+  --color-destructive-foreground: #fafaf9;
+
+  /* ---- Recharts series (chart-1..5) — tuned for #141312 glass ---- */
+  --color-chart-1: #4ade80;  /* win-green     — primary positive (bankroll, weekly wins) */
+  --color-chart-2: #7dd3fc;  /* period-sky    — secondary / neutral comparison */
+  --color-chart-3: #fbbf24;  /* live-amber    — tertiary / pending / at-risk */
+  --color-chart-4: #a78bfa;  /* FP-violet     — freeplay-specific series */
+  --color-chart-5: #f87171;  /* loss-red      — downside / loss series */
+
+  /* ---- Glass tokens (NEW — consumed by .glass-card utility) ----
+     Tuned for "glass tray over animated background": low surface
+     opacity so the NeuralBackground particles (and their data-glow
+     proximity color-shift) read clearly through the card. The 22%
+     alpha gives just enough surface presence to feel like a discrete
+     plane while the 14px blur frosts the particles into a soft halo
+     that color-shifts with the data-glow attribute on each card. */
+  --glass-bg:        rgba(20, 19, 18, 0.22);          /* warm charcoal @ 22% — see-through */
+  --glass-bg-hover:  rgba(20, 19, 18, 0.32);          /* hover lift — +10 alpha pts */
+  --glass-border:    rgba(231, 229, 228, 0.10);       /* neutral-200 @ 10% alpha */
+  --glass-border-hover: rgba(231, 229, 228, 0.16);    /* hover edge */
+  --glass-highlight: rgba(250, 250, 249, 0.06);       /* inset top-edge refraction */
+  --glass-highlight-hover: rgba(250, 250, 249, 0.10);
+  --glass-shadow:    0 1px 2px rgba(0, 0, 0, 0.18);   /* idle drop shadow — minimal */
+  --glass-shadow-hover: 0 1px 3px rgba(0, 0, 0, 0.22);
+  --glass-blur:      14px;                            /* backdrop-filter blur radius */
+  --glass-saturate:  160%;                            /* vibrancy — slightly tamed */
+
+  /* ---- Radius ---- */
+  --radius: 0.5rem;  /* base — derivatives (sm/md/lg/xl/2xl/3xl/4xl) computed in @theme inline below */
+
+  /* ---- Fonts ---- */
+  --font-sans:    'Geist Variable', ui-sans-serif, system-ui, sans-serif;
+  --font-heading: 'Geist Variable', ui-sans-serif, system-ui, sans-serif;
+  --font-mono:    ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply antialiased bg-background text-foreground;
+    margin: 0;
+  }
+  html {
+    @apply font-sans;
+  }
+}
+
+/* ===========================================================
+   Mobile form-control zoom guard (UNLAYERED — must beat the
+   `text-sm` Tailwind utility, which lives in @layer utilities;
+   unlayered rules win over any cascade layer regardless of
+   specificity).
+
+   iOS Safari auto-zooms when a focused text field has a computed
+   font-size below 16px, and routinely fails to zoom back out on
+   blur — leaving the page magnified with the right edge clipped
+   until the URL is reopened. The shadcn Input/Textarea primitives
+   already use text-base (16px) on mobile, but raw <select>/<input>
+   elements in the app fall back to text-sm (14px). Force every
+   form control to >=16px below the `md` breakpoint so focusing one
+   can never trigger the stuck zoom.
+   =========================================================== */
+@media (max-width: 767.98px) {
+  input,
+  select,
+  textarea {
+    font-size: 16px;
+  }
+}
+
+/* ===========================================================
+   @theme inline — kept for radius derivatives only. The
+   color/font re-exports against `var(--background)` etc. were
+   removed because the new top-level @theme { } block is now
+   the single source of truth (HEX values, no oklch indirection).
+   The dark-only :root { } / .dark { } oklch blocks were
+   deleted entirely; the app boots with html.dark mounted and
+   the new tokens are dark-tuned by default.
+   =========================================================== */
+@theme inline {
+  --radius-sm: calc(var(--radius) * 0.6);
+  --radius-md: calc(var(--radius) * 0.8);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) * 1.4);
+  --radius-2xl: calc(var(--radius) * 1.8);
+  --radius-3xl: calc(var(--radius) * 2.2);
+  --radius-4xl: calc(var(--radius) * 2.6);
+
+  /* Sidebar tokens — alias to the new neutrals so the sidebar
+     primitives keep working without referencing the deleted
+     --sidebar-* oklch chain. */
+  --color-sidebar:                    var(--color-card);
+  --color-sidebar-foreground:         var(--color-card-foreground);
+  --color-sidebar-primary:            var(--color-primary);
+  --color-sidebar-primary-foreground: var(--color-primary-foreground);
+  --color-sidebar-accent:             var(--color-accent);
+  --color-sidebar-accent-foreground:  var(--color-accent-foreground);
+  --color-sidebar-border:             var(--color-border);
+  --color-sidebar-ring:               var(--color-ring);
+}
+
+@layer components {
+  /* ===========================================================
+     .glass-card — the ONE frosted-glass surface in the app.
+     Reads as relatively opaque AND see-through, neutral not blue.
+     Inspired by Apple's RegularMaterial / macOS Sonoma vibrancy,
+     tuned onto a Vercel-style warm neutral palette.
+     =========================================================== */
+  .glass-card {
+    /* !important on the visual properties below: the shadcn <Card>
+       primitive (src/components/ui/card.tsx) bakes `bg-card` and
+       `ring-1 ring-foreground/10` directly into its className.
+       Tailwind utilities live in a higher cascade layer than this
+       @layer components rule, so without !important the solid card
+       background wins and the glass effect never shows up. */
+
+    /* Surface fill — warm charcoal at 22% alpha. Low enough that the
+       NeuralBackground particles (and their per-card data-glow
+       proximity color-shift) read clearly through the card. */
+    background-color: var(--glass-bg) !important;
+
+    /* Frosted material — 14px blur frosts the particles into a soft
+       color-shifting halo without erasing them. saturate(160%) gives
+       Apple-style vibrancy that pulls a hint of the data-glow color
+       back into the surface tint. */
+    -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturate)) !important;
+    backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturate)) !important;
+
+    /* Hairline border — single 1px, warm neutral at low alpha. */
+    border: 1px solid var(--glass-border) !important;
+
+    /* Inset highlight (1px top edge, subtle refraction) + minimal
+       drop shadow. Also nullify Tailwind's `ring-1` shadow component
+       (--tw-ring-shadow) so the Card's default ring doesn't paint a
+       second opaque hairline on top of our glass border. */
+    --tw-ring-shadow: 0 0 #0000;
+    --tw-ring-offset-shadow: 0 0 #0000;
+    box-shadow:
+      inset 0 1px 0 var(--glass-highlight),
+      var(--glass-shadow) !important;
+
+    /* Corner radius — slightly smaller than the Card primitive's
+       rounded-xl so the inner content rounds against a softer edge. */
+    border-radius: var(--radius-lg, 0.5rem);
+
+    /* GPU hint — these cards do hover transitions. */
+    will-change: background-color, border-color;
+
+    /* Subtle transition only — no scale, no spring. */
+    transition:
+      background-color 200ms cubic-bezier(0.16, 1, 0.3, 1),
+      border-color 200ms cubic-bezier(0.16, 1, 0.3, 1),
+      box-shadow 200ms cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .glass-card:hover {
+    /* Lift slightly — 32% alpha + border bumped. The card becomes
+       a touch more present under the cursor without breaking the
+       floating-glass feel. */
+    background-color: var(--glass-bg-hover) !important;
+    border-color: var(--glass-border-hover) !important;
+    box-shadow:
+      inset 0 1px 0 var(--glass-highlight-hover),
+      var(--glass-shadow-hover) !important;
+  }
+
+  /* Reduced-motion respect */
+  @media (prefers-reduced-motion: reduce) {
+    .glass-card,
+    .glass-card:hover {
+      transition: none;
+    }
+  }
+}
+
+/* Live indicator pulse — subtle opacity only */
+@keyframes pulse-live {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.35; }
+}
+.animate-pulse-live {
+  animation: pulse-live 2s ease-in-out infinite;
+}
+
+.tabular-nums {
+  font-variant-numeric: tabular-nums;
+}

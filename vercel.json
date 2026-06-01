@@ -1,0 +1,15 @@
+{
+  "installCommand": "PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD=1 npm install",
+  "crons": [
+    { "path": "/api/cron/line-movement", "schedule": "*/5 * * * *" },
+    { "path": "/api/cron/odds-slate", "schedule": "0 16 * * *" },
+    { "path": "/api/cron/refresh-teams", "schedule": "0 8 * * *" },
+    { "path": "/api/cron/auto-settle", "schedule": "*/12 * * * *" },
+    { "path": "/api/cron/strategy-clv", "schedule": "*/15 * * * *" },
+    { "path": "/api/cron/line-shop-markets", "schedule": "*/15 * * * *" },
+    { "path": "/api/cron/arbitrage-scan", "schedule": "*/30 * * * *" }
+  ],
+  "rewrites": [
+    { "source": "/((?!api/|assets/|.*\\..*).*)", "destination": "/index.html" }
+  ]
+}

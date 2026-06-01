@@ -1,0 +1,43 @@
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+node_modules
+dist
+dist-ssr
+*.local
+
+# Editor directories and files
+.vscode/*
+!.vscode/extensions.json
+.idea
+.DS_Store
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+.vercel
+.env
+.env.*
+!.env.example
+.auth/                # Playwright storageState / session cookies — NEVER commit (Phase 11, T-11-02)
+.fe-design/
+
+# Claude Code local artifacts (not for VCS)
+.claude/worktrees/
+.claude/scheduled_tasks.lock
+.claude/data/
+.playwright-mcp/
+.audit-tmp/
+.superpowers/
+
+# Python bytecode caches
+__pycache__/
+*.pyc
